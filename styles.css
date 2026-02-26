@@ -25,16 +25,20 @@ button{
     cursor:pointer;
 }
 
+/* ⭐ IMPORTANT PART */
 .board{
     width:360px;
+    height:360px;          /* REQUIRED */
     margin:20px auto;
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(3,120px);
+    grid-template-rows:repeat(3,120px);
 }
 
+/* ⭐ IMPORTANT PART */
 .cell{
     width:120px;
-    height:120px;
+    height:120px;          /* REQUIRED */
     border:2px solid #000;
     font-size:60px;
     display:flex;
