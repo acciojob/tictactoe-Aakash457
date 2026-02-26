@@ -1,60 +1,53 @@
-const submitBtn = document.getElementById("submit");
-const startScreen = document.getElementById("start-screen");
-const gameScreen = document.getElementById("game-screen");
-const message = document.querySelector(".message");
-const cells = document.querySelectorAll(".cell");
+const submitBtn=document.getElementById("submit");
+const gameScreen=document.getElementById("game-screen");
+const startScreen=document.getElementById("start-screen");
+const message=document.querySelector(".message");
+const cells=document.querySelectorAll(".cell");
 
-let player1 = "";
-let player2 = "";
-let currentPlayer = "x";
-let board = ["","","","","","","","",""];
-let gameActive = true;
+let player1="";
+let player2="";
+let currentPlayer="x";
+let board=["","","","","","","","",""];
+let gameActive=true;
 
-submitBtn.addEventListener("click", () => {
-    player1 = document.getElementById("player1").value || "Player1";
-    player2 = document.getElementById("player2").value || "Player2";
+submitBtn.onclick=()=>{
+player1=document.getElementById("player1").value||"Player1";
+player2=document.getElementById("player2").value||"Player2";
 
-    startScreen.classList.add("hide");
-    gameScreen.classList.remove("hide");
+startScreen.style.display="none";
+gameScreen.style.visibility="visible";   // ⭐ IMPORTANT
 
-    message.textContent = `${player1}, you're up`;
-});
+message.textContent=`${player1}, you're up`;
+};
 
 cells.forEach(cell=>{
-    cell.addEventListener("click",handleClick);
-});
+cell.onclick=(e)=>{
+const i=e.target.id-1;
 
-function handleClick(e){
-    const index = e.target.id - 1;
+if(board[i]!==""||!gameActive)return;
 
-    if(board[index]!=="" || !gameActive) return;
+board[i]=currentPlayer;
+e.target.textContent=currentPlayer;
 
-    board[index] = currentPlayer;
-    e.target.textContent = currentPlayer;
-
-    if(checkWinner()){
-        const winner = currentPlayer==="x" ? player1 : player2;
-        message.textContent = `${winner} congratulations you won!`;
-        gameActive=false;
-        return;
-    }
-
-    currentPlayer = currentPlayer==="x" ? "o" : "x";
-
-    message.textContent =
-        currentPlayer==="x"
-        ? `${player1}, you're up`
-        : `${player2}, you're up`;
+if(checkWin()){
+const winner=currentPlayer==="x"?player1:player2;
+message.textContent=`${winner} congratulations you won!`;
+gameActive=false;
+return;
 }
 
-function checkWinner(){
-    const wins=[
-        [0,1,2],[3,4,5],[6,7,8],
-        [0,3,6],[1,4,7],[2,5,8],
-        [0,4,8],[2,4,6]
-    ];
+currentPlayer=currentPlayer==="x"?"o":"x";
+message.textContent=currentPlayer==="x"
+?`${player1}, you're up`
+:`${player2}, you're up`;
+};
+});
 
-    return wins.some(([a,b,c])=>{
-        return board[a] && board[a]===board[b] && board[a]===board[c];
-    });
+function checkWin(){
+const w=[
+[0,1,2],[3,4,5],[6,7,8],
+[0,3,6],[1,4,7],[2,5,8],
+[0,4,8],[2,4,6]
+];
+return w.some(([a,b,c])=>board[a]&&board[a]===board[b]&&board[a]===board[c]);
 }
