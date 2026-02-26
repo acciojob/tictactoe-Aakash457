@@ -3,40 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <title>Tic Tac Toe</title>
-<link rel="stylesheet" href="style.css">
+
+<style>
+body{
+font-family:Arial;
+text-align:center;
+background:#eee;
+}
+
+.board{
+width:360px;
+height:360px;
+margin:20px auto;
+display:grid;
+grid-template-columns:repeat(3,120px);
+grid-template-rows:repeat(3,120px);
+}
+
+.cell{
+width:120px;
+height:120px;
+border:2px solid #000;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:60px;
+background:#e7a9b2;
+cursor:pointer;
+}
+
+input{
+padding:10px;
+margin:10px;
+width:250px;
+}
+
+button{
+padding:12px 30px;
+}
+
+.message{
+font-size:22px;
+font-weight:bold;
+}
+</style>
+
 </head>
 <body>
 
 <div class="container">
 
-    <!-- Start -->
-    <div id="start-screen">
-        <h1>Tic Tac Toe</h1>
-        <input id="player1" placeholder="enter name">
-        <input id="player2" placeholder="enter name">
-        <button id="submit">Start Game</button>
-    </div>
+<div id="start-screen">
+<h1>Tic Tac Toe</h1>
+<input id="player1" placeholder="enter name">
+<input id="player2" placeholder="enter name">
+<button id="submit">Start Game</button>
+</div>
 
-    <!-- Game -->
-    <div id="game-screen" style="visibility:hidden;">
-        <h1>Tic Tac Toe</h1>
-        <div class="message"></div>
+<div id="game-screen" style="display:none;">
+<h1>Tic Tac Toe</h1>
+<div class="message"></div>
 
-        <div class="board">
-            <div class="cell" id="1"></div>
-            <div class="cell" id="2"></div>
-            <div class="cell" id="3"></div>
-            <div class="cell" id="4"></div>
-            <div class="cell" id="5"></div>
-            <div class="cell" id="6"></div>
-            <div class="cell" id="7"></div>
-            <div class="cell" id="8"></div>
-            <div class="cell" id="9"></div>
-        </div>
-    </div>
+<div class="board">
+<div class="cell" id="1"></div>
+<div class="cell" id="2"></div>
+<div class="cell" id="3"></div>
+<div class="cell" id="4"></div>
+<div class="cell" id="5"></div>
+<div class="cell" id="6"></div>
+<div class="cell" id="7"></div>
+<div class="cell" id="8"></div>
+<div class="cell" id="9"></div>
+</div>
+</div>
 
 </div>
 
-<script src="script.js"></script>
+<script>
+const submit=document.getElementById("submit");
+const start=document.getElementById("start-screen");
+const game=document.getElementById("game-screen");
+const msg=document.querySelector(".message");
+const cells=document.querySelectorAll(".cell");
+
+let p1="",p2="";
+let turn="x";
+let board=["","","","","","","","",""];
+let active=true;
+
+submit.onclick=()=>{
+p1=document.getElementById("player1").value||"Player1";
+p2=document.getElementById("player2").value||"Player2";
+
+start.style.display="none";
+game.style.display="block";
+
+msg.textContent=`${p1}, you're up`;
+};
+
+cells.forEach(c=>{
+c.onclick=e=>{
+const i=e.target.id-1;
+if(board[i]||!active)return;
+
+board[i]=turn;
+e.target.textContent=turn;
+
+if(win()){
+const w=turn==="x"?p1:p2;
+msg.textContent=`${w} congratulations you won!`;
+active=false;
+return;
+}
+
+turn=turn==="x"?"o":"x";
+msg.textContent=turn==="x"?`${p1}, you're up`:`${p2}, you're up`;
+};
+});
+
+function win(){
+const w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+return w.some(([a,b,c])=>board[a]&&board[a]===board[b]&&board[a]===board[c]);
+}
+</script>
+
 </body>
 </html>
